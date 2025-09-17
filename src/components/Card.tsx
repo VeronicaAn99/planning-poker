@@ -25,14 +25,12 @@ export const Card = ({
 					}`}>
 					{value}
 				</div>
-
 				<div
 					className={`text-2xl font-bold  ${
 						isSelected ? "text-blue-500" : "text-gray-800"
 					}`}>
 					{value}
 				</div>
-
 				<div
 					className={`absolute bottom-[-4px] right-[-4px] bg-white px-2 py-1 rounded-full text-xs font-semibold ${
 						isSelected ? "text-blue-300 rounded-full" : "text-gray-600"
