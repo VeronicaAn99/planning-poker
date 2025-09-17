@@ -7,7 +7,12 @@ const Home: React.FC = () => {
 			<h1 className="text-2xl font-bold">Planning Poker</h1>
 
 			{Array.from({ length: 10 }).map((_, index) => (
-				<Card key={index} />
+				<Card
+					key={index}
+					value={index.toString()}
+					isSelected={false}
+					onClick={() => {}}
+				/>
 			))}
 		</div>
 	);
