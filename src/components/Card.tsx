@@ -21,19 +21,19 @@ export const Card = ({
 				}`}>
 				<div
 					className={`absolute top-[-4px] left-[-4px] bg-white px-2 py-1 text-xs rounded-full font-semibold ${
-						isSelected ? "text-blue-300" : "text-gray-600"
+						isSelected ? "text-blue-300" : "text-gray-400"
 					}`}>
 					{value}
 				</div>
 				<div
 					className={`text-2xl font-bold  ${
-						isSelected ? "text-blue-500" : "text-gray-800"
+						isSelected ? "text-blue-500" : "text-gray-600"
 					}`}>
 					{value}
 				</div>
 				<div
 					className={`absolute bottom-[-4px] right-[-4px] bg-white px-2 py-1 rounded-full text-xs font-semibold ${
-						isSelected ? "text-blue-300 rounded-full" : "text-gray-600"
+						isSelected ? "text-blue-300 rounded-full" : "text-gray-400"
 					}`}>
 					{value}
 				</div>
