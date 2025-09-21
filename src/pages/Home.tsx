@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "../components/Card";
 import { AddUser } from "@/components/AddUser";
 import { Table } from "@/components/Table";
+import { cardValues, randomUserNames } from "@/lib/utils";
 
 export type User = {
 	id: number;
@@ -14,7 +15,6 @@ const Home = () => {
 	const [users, setUsers] = useState<User[]>([]);
 	const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 	const [selectedCard, setSelectedCard] = useState<number | null>(null);
-	const cardValues = ["0", "1", "2", "3", "5", "8", "13", "20", "40", "100"];
 
 	const addUserSimple = (name: string): void => {
 		const newUser: User = {
@@ -28,41 +28,10 @@ const Home = () => {
 	};
 
 	const addRandomUser = (): void => {
-		const randomNames = [
-			"Alice",
-			"Bob",
-			"Charlie",
-			"Diana",
-			"Eve",
-			"Frank",
-			"Grace",
-			"Henry",
-			"Ivy",
-			"Jack",
-			"Kate",
-			"Liam",
-			"Maya",
-			"Noah",
-			"Olivia",
-			"Paul",
-			"Quinn",
-			"Ruby",
-			"Sam",
-			"Tina",
-			"Uma",
-			"Victor",
-			"Wendy",
-			"Xavier",
-			"Yara",
-			"Zoe",
-		];
-
-		const cardValues = ["0", "1", "2", "3", "5", "8", "13", "20", "40", "100"];
-
-		// Generate just 1 random user
+		// Generate just 1 more random user
 		const randomName =
-			randomNames[Math.floor(Math.random() * randomNames.length)];
-		const hasVoted = Math.random() > 0.4; // 60% chance of having voted
+			randomUserNames[Math.floor(Math.random() * randomUserNames.length)];
+		const hasVoted = Math.random() > 0.4;
 		const vote = hasVoted
 			? cardValues[Math.floor(Math.random() * cardValues.length)]
 			: null;
