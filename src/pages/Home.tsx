@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Card } from "../components/Card";
 import { AddUser } from "@/components/AddUser";
+import { Table } from "@/components/Table";
 
-type User = {
+export type User = {
 	id: number;
 	name: string;
 	hasVoted: boolean;
@@ -103,6 +104,7 @@ const Home = () => {
 					{/* Main Content */}
 					<div className="flex-1 flex flex-col items-center justify-center p-6 gap-6">
 						<h1 className="text-2xl font-bold">Planning Poker</h1>
+						<Table users={users} />
 
 						<div className="flex items-center">
 							{cardValues.map((value, index) => (
@@ -140,14 +142,6 @@ const Home = () => {
 								</p>
 							</div>
 						)}
-
-						{/* Add Random User Button */}
-						<button
-							onClick={addRandomUser}
-							className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-							<span className="mr-2">➕</span>
-							Add Random User (+1)
-						</button>
 					</div>
 
 					{/* Sidebar */}
@@ -205,13 +199,21 @@ const Home = () => {
 							</div>
 
 							{/* Sidebar Footer */}
-							<div className="p-4 border-t border-gray-200 bg-gray-50">
+							<div className="p-4 border-t border-gray-200 bg-gray-50 space-y-3">
 								<div className="flex justify-between items-center text-sm text-gray-600">
 									<span>Voted: {users.filter((u) => u.hasVoted).length}</span>
 									<span>
 										Waiting: {users.filter((u) => !u.hasVoted).length}
 									</span>
 								</div>
+
+								{/* Add Random User Button */}
+								<button
+									onClick={addRandomUser}
+									className="w-full inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+									<span className="mr-2">➕</span>
+									Add Random User (+1)
+								</button>
 							</div>
 						</div>
 					)}
