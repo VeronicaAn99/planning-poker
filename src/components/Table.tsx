@@ -4,9 +4,14 @@ import { PaymeSwissCard } from "@/components/PaymeSwissCard";
 type TableProps = {
 	users?: User[];
 	currentUser?: User;
+	showAverage?: boolean;
 };
 
-export const Table = ({ users = [], currentUser }: TableProps) => {
+export const Table = ({
+	users = [],
+	currentUser,
+	showAverage = false,
+}: TableProps) => {
 	const votedUsers = users.filter((user) => user.hasVoted && user.vote);
 
 	return (
@@ -21,9 +26,9 @@ export const Table = ({ users = [], currentUser }: TableProps) => {
 							{votedUsers.map((user) => (
 								<div key={user.id} className="scale-75">
 									<PaymeSwissCard
-										value="?"
+										value={showAverage ? user.vote! : "?"}
 										isSelected={false}
-										showBack={true}
+										showBack={!showAverage}
 										onClick={() => {}}
 									/>
 								</div>
@@ -50,10 +55,11 @@ export const Table = ({ users = [], currentUser }: TableProps) => {
 						}}>
 						<div className="text-center">
 							{user.hasVoted ? (
-								user.id === currentUser?.id && user.vote ? (
+								// Show current user's card or revealed cards based on showAverage
+								(user.id === currentUser?.id && user.vote) || showAverage ? (
 									<div className="mb-1 mx-auto scale-50">
 										<PaymeSwissCard
-											value={user.vote}
+											value={user.vote!}
 											isSelected={false}
 											showBack={false}
 											onClick={() => {}}

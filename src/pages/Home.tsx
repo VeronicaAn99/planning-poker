@@ -4,6 +4,7 @@ import { Table } from "@/components/Table";
 import { cardValues, randomUserNames } from "@/lib/utils";
 import { PaymeSwissCard } from "@/components/PaymeSwissCard";
 import { UsersSidebar } from "@/components/UsersSidebar";
+import { Button } from "@/components/ui/button";
 
 export type User = {
 	id: number;
@@ -16,6 +17,7 @@ const Home = () => {
 	const [users, setUsers] = useState<User[]>([]);
 	const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 	const [selectedCard, setSelectedCard] = useState<number | null>(null);
+	const [showAverage, setShowAverage] = useState<boolean>(false);
 
 	const addUserSimple = (name: string): void => {
 		const newUser: User = {
@@ -35,14 +37,12 @@ const Home = () => {
 		const vote = hasVoted
 			? cardValues[Math.floor(Math.random() * cardValues.length)]
 			: null;
-
 		const newUser: User = {
 			id: Date.now(),
 			name: randomName,
 			hasVoted,
 			vote,
 		};
-
 		setUsers((prev) => [...prev, newUser]);
 	};
 
@@ -62,6 +62,35 @@ const Home = () => {
 		}
 	};
 
+	const calculateAverage = (): number | null => {
+		const votedUsers = users.filter((user) => user.hasVoted && user.vote);
+		if (votedUsers.length === 0) return null;
+
+		const numericVotes = votedUsers
+			.map((user) => {
+				const vote = user.vote;
+				// Handle special cards
+				if (vote === "?" || vote === "∞" || vote === "☕") return null;
+				// Convert string to number
+				const num = parseFloat(vote || "0");
+				return isNaN(num) ? null : num;
+			})
+			.filter((vote): vote is number => vote !== null);
+
+		if (numericVotes.length === 0) return null;
+
+		return (
+			numericVotes.reduce((sum, vote) => sum + vote, 0) / numericVotes.length
+		);
+	};
+
+	const votedUsersCount = users.filter(
+		(user) => user.hasVoted && user.vote
+	).length;
+	const totalUsersCount = users.length;
+	const average = calculateAverage();
+	const canShowAverage = votedUsersCount > 0;
+
 	return (
 		<div className="min-h-screen bg-gray-50">
 			{!currentUser ? (
@@ -72,8 +101,11 @@ const Home = () => {
 				<div className="flex h-screen">
 					<div className="flex-1 flex flex-col items-center justify-center p-6 gap-6">
 						<h1 className="text-2xl font-bold">Planning Poker</h1>
-						<Table users={users} currentUser={currentUser} />
-
+						<Table
+							users={users}
+							currentUser={currentUser}
+							showAverage={showAverage}
+						/>
 						<div className="flex items-center">
 							{cardValues.map((value, index) => (
 								<div
@@ -93,15 +125,50 @@ const Home = () => {
 											const newSelectedCard =
 												selectedCard === index ? null : index;
 											setSelectedCard(newSelectedCard);
-
 											handleVote(newSelectedCard !== null ? value : null);
 										}}
 									/>
 								</div>
 							))}
 						</div>
-					</div>
 
+						<div className="flex flex-col items-center gap-3">
+							<Button
+								onClick={() => setShowAverage(!showAverage)}
+								disabled={!canShowAverage}
+								variant="outline"
+								size="lg"
+								className={`transition-all duration-200 ${
+									canShowAverage
+										? "shadow-lg hover:shadow-xl"
+										: "opacity-50 cursor-not-allowed"
+								}`}>
+								{showAverage ? "Hide Results" : "See Average"}
+							</Button>
+
+							{canShowAverage && (
+								<div
+									className={`text-center bg-white rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${
+										showAverage
+											? "p-4 shadow-md border max-h-96 opacity-100"
+											: "max-h-0 opacity-0 p-0"
+									}`}>
+									<div className="text-sm text-gray-600 mb-1">
+										{votedUsersCount} of {totalUsersCount} voted
+									</div>
+									{average !== null ? (
+										<div className="text-2xl font-bold text-blue-600">
+											Average: {average.toFixed(1)}
+										</div>
+									) : (
+										<div className="text-lg text-gray-500">
+											No numeric votes to calculate average
+										</div>
+									)}
+								</div>
+							)}
+						</div>
+					</div>
 					<UsersSidebar
 						currentUser={currentUser}
 						users={users}
