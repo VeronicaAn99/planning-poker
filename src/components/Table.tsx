@@ -23,7 +23,7 @@ export const Table = ({ users = [], currentUser }: TableProps) => {
 									<PaymeSwissCard
 										value="?"
 										isSelected={false}
-										showBack={true} // Always show pattern back for mystery
+										showBack={true}
 										onClick={() => {}}
 									/>
 								</div>
