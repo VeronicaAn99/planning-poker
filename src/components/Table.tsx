@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { User } from "@/pages/Home";
 import { PaymeSwissCard } from "@/components/PaymeSwissCard";
 
@@ -12,7 +13,38 @@ export const Table = ({
 	currentUser,
 	showAverage = false,
 }: TableProps) => {
+	const [shakingCenterUserId, setShakingCenterUserId] = useState<number | null>(
+		null
+	);
+	const [shakingCircleUserId, setShakingCircleUserId] = useState<number | null>(
+		null
+	);
+
 	const votedUsers = users.filter((user) => user.hasVoted && user.vote);
+
+	const [showMyCard, setShowMyCard] = useState<boolean>(false);
+
+	const handleCenterCardClick = (user: User) => {
+		if (user.id === currentUser?.id) {
+			// If it's my card, toggle showing the front
+			setShowMyCard(!showMyCard);
+		} else {
+			// If it's not my card, shake it
+			setShakingCenterUserId(user.id);
+			setTimeout(() => setShakingCenterUserId(null), 600);
+		}
+	};
+
+	const handleCircleCardClick = (user: User) => {
+		if (user.id === currentUser?.id) {
+			// If it's my card, toggle showing the front
+			setShowMyCard(!showMyCard);
+		} else {
+			// If it's not my card, shake it
+			setShakingCircleUserId(user.id);
+			setTimeout(() => setShakingCircleUserId(null), 600);
+		}
+	};
 
 	return (
 		<div className="relative w-full h-[60%] flex items-center justify-center">
@@ -23,27 +55,41 @@ export const Table = ({
 							{votedUsers.length} voted
 						</div>
 						<div className="flex flex-wrap gap-1 justify-center">
-							{votedUsers.map((user) => (
-								<div key={user.id} className="scale-75">
-									<PaymeSwissCard
-										value={showAverage ? user.vote! : "?"}
-										isSelected={false}
-										showBack={!showAverage}
-										onClick={() => {}}
-									/>
-								</div>
-							))}
+							{votedUsers.map((user) => {
+								const isShaking = shakingCenterUserId === user.id;
+								const isCurrentUser = user.id === currentUser?.id;
+								const shouldShowFront =
+									showAverage || (isCurrentUser && showMyCard);
+
+								return (
+									<div
+										key={user.id}
+										className={`scale-75 ${
+											isShaking ? "animate-shake" : ""
+										} cursor-pointer`}
+										onClick={() => handleCenterCardClick(user)}>
+										<PaymeSwissCard
+											value={shouldShowFront ? user.vote! : "?"}
+											isSelected={false}
+											showBack={!shouldShowFront}
+											onClick={() => {}}
+										/>
+									</div>
+								);
+							})}
 						</div>
 					</div>
 				) : (
 					<div className="text-blue-400 text-sm">No votes yet</div>
 				)}
 			</div>
+
 			{users.map((user, index) => {
 				const angle = (index * 360) / users.length;
 				const radius = 240;
 				const x = Math.cos((angle * Math.PI) / 180) * radius;
 				const y = Math.sin((angle * Math.PI) / 180) * radius;
+				const isShaking = shakingCircleUserId === user.id;
 
 				return (
 					<div
@@ -55,9 +101,12 @@ export const Table = ({
 						}}>
 						<div className="text-center">
 							{user.hasVoted ? (
-								// Show current user's card or revealed cards based on showAverage
 								(user.id === currentUser?.id && user.vote) || showAverage ? (
-									<div className="mb-1 mx-auto scale-50">
+									<div
+										className={`mb-1 mx-auto scale-50 ${
+											isShaking ? "animate-shake" : ""
+										} cursor-pointer`}
+										onClick={() => handleCircleCardClick(user)}>
 										<PaymeSwissCard
 											value={user.vote!}
 											isSelected={false}
@@ -65,8 +114,25 @@ export const Table = ({
 											onClick={() => {}}
 										/>
 									</div>
+								) : user.id === currentUser?.id ? (
+									<div
+										className={`mb-1 mx-auto scale-50 cursor-pointer ${
+											isShaking ? "animate-shake" : ""
+										}`}
+										onClick={() => handleCircleCardClick(user)}>
+										<PaymeSwissCard
+											value={showMyCard ? user.vote! : "?"}
+											isSelected={false}
+											showBack={!showMyCard}
+											onClick={() => {}}
+										/>
+									</div>
 								) : (
-									<div className="mb-1 mx-auto scale-50">
+									<div
+										className={`mb-1 mx-auto scale-50 ${
+											isShaking ? "animate-shake" : ""
+										} cursor-pointer`}
+										onClick={() => handleCircleCardClick(user)}>
 										<PaymeSwissCard
 											value="?"
 											isSelected={false}
