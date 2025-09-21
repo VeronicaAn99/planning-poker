@@ -8,6 +8,7 @@ type SwissCardProps = {
 	isSelected?: boolean;
 	showBack?: boolean;
 	onClick: () => void;
+	size?: "small" | "default" | "large";
 };
 
 export const SwissPattern = ({
@@ -51,17 +52,25 @@ export const PaymeSwissCard = ({
 	isSelected = false,
 	showBack = false,
 	onClick,
+	size = "default",
 }: SwissCardProps) => {
 	if (showBack) {
 		return (
 			<div
-				className={`w-20 h-28 rounded-lg border-2 bg-slate-800 p-1 relative cursor-pointer transition-all duration-200 hover:shadow-md overflow-hidden ${
+				className={`  bg-slate-800 relative cursor-pointer transition-all duration-200 hover:shadow-md overflow-hidden ${
 					isSelected
 						? "border-blue-300 shadow-lg"
 						: "border-slate-500 hover:border-slate-400"
+				} ${
+					size === "small"
+						? "h-18 w-12 rounded-sm border-1 p-0.5"
+						: "w-20 h-28 rounded-lg border-2 p-1"
 				}`}
 				onClick={onClick}>
-				<div className="w-full h-full rounded-md relative bg-slate-800 overflow-hidden">
+				<div
+					className={`w-full h-full  relative bg-slate-800 overflow-hidden ${
+						size === "small" ? "rounded-sm" : "rounded-md"
+					}`}>
 					<div className="absolute inset-0">
 						<div className="grid grid-cols-4 gap-0 h-full w-full">
 							{Array.from({ length: 24 }).map((_, i) => (
@@ -82,31 +91,46 @@ export const PaymeSwissCard = ({
 
 	return (
 		<div
-			className={`w-20 h-28 rounded-lg border-2 bg-white p-1 relative cursor-pointer transition-all duration-200 hover:shadow-md ${
+			className={`bg-white relative cursor-pointer transition-all duration-200 hover:shadow-md ${
 				isSelected
 					? "border-blue-300 shadow-lg"
 					: "border-gray-300 hover:border-gray-400"
+			} ${
+				size === "small"
+					? "h-18 w-12 rounded-sm border-1 p-0.5"
+					: "w-20 h-28 rounded-lg border-2 p-1"
 			}`}
 			onClick={onClick}>
 			<div
-				className={`w-full h-full rounded-md relative flex items-center justify-center ${
+				className={`w-full h-full relative flex items-center justify-center ${
 					isSelected ? "bg-blue-50" : "bg-gray-100"
-				}`}>
+				} ${
+					size === "small" ? "h-18 w-12 rounded-sm" : "w-20 h-28 rounded-md"
+				} `}>
 				<div
-					className={`absolute top-[-4px] left-[-4px] bg-white px-2 py-1 text-xs rounded-full font-semibold ${
+					className={`absolute  bg-white rounded-full font-semibold ${
 						isSelected ? "text-blue-300" : "text-gray-400"
+					}
+					${
+						size === "small"
+							? "text-[6px]  px-1 py-0.5 top-[-2px] left-[-2px]"
+							: "px-2 py-1 text-xs top-[-4px] left-[-4px]"
 					}`}>
 					{value}
 				</div>
 				<div
 					className={`text-2xl font-bold  ${
 						isSelected ? "text-blue-500" : "text-gray-600"
-					}`}>
+					} `}>
 					{value}
 				</div>
 				<div
-					className={`absolute bottom-[-4px] right-[-4px] bg-white px-2 py-1 rounded-full text-xs font-semibold ${
+					className={`absolute  bg-white  rounded-full text-xs font-semibold ${
 						isSelected ? "text-blue-300 rounded-full" : "text-gray-400"
+					} ${
+						size === "small"
+							? "text-[6px] px-1 py-0.5 bottom-[-2px] right-[-2px]"
+							: "text-xs px-2 py-1 bottom-[-4px] right-[-4px]"
 					}`}>
 					{value}
 				</div>
