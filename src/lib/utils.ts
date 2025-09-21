@@ -34,15 +34,5 @@ export const randomUserNames = [
 	"Zoe",
 ];
 
-export const cardValues = [
-	"0",
-	"1",
-	"2",
-	"3",
-	"5",
-	"8",
-	"13",
-	"20",
-	"40",
-	"100",
-];
+// TODO: Make this values selectable by user
+export const cardValues = ["1", "2", "3", "5", "8", "13", "21", "34", "☕"];

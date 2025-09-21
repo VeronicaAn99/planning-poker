@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Card } from "../components/Card";
 import { AddUser } from "@/components/AddUser";
 import { Table } from "@/components/Table";
 import { cardValues, randomUserNames } from "@/lib/utils";
+import { PaymeSwissCard } from "@/components/PaymeSwissCard";
 
 export type User = {
 	id: number;
@@ -28,7 +28,6 @@ const Home = () => {
 	};
 
 	const addRandomUser = (): void => {
-		// Generate just 1 more random user
 		const randomName =
 			randomUserNames[Math.floor(Math.random() * randomUserNames.length)];
 		const hasVoted = Math.random() > 0.4;
@@ -73,7 +72,7 @@ const Home = () => {
 					{/* Main Content */}
 					<div className="flex-1 flex flex-col items-center justify-center p-6 gap-6">
 						<h1 className="text-2xl font-bold">Planning Poker</h1>
-						<Table users={users} />
+						<Table users={users} currentUser={currentUser} />
 
 						<div className="flex items-center">
 							{cardValues.map((value, index) => (
@@ -86,34 +85,23 @@ const Home = () => {
 										marginLeft: index === 0 ? "0" : "-14px",
 										zIndex: selectedCard === index ? 20 : 10 - index,
 									}}>
-									<Card
+									<PaymeSwissCard
 										value={value}
 										isSelected={selectedCard === index}
+										showBack={false}
 										onClick={() => {
 											const newSelectedCard =
 												selectedCard === index ? null : index;
 											setSelectedCard(newSelectedCard);
+
 											handleVote(newSelectedCard !== null ? value : null);
 										}}
 									/>
 								</div>
 							))}
 						</div>
-
-						{selectedCard !== null && (
-							<div className="text-center">
-								<p className="text-lg text-gray-700">
-									Selected:{" "}
-									<span className="font-bold text-blue-600">
-										{cardValues[selectedCard]}
-									</span>{" "}
-									story points
-								</p>
-							</div>
-						)}
 					</div>
 
-					{/* Sidebar */}
 					{users.length > 0 && (
 						<div className="w-80 bg-white border-l border-gray-200 flex flex-col">
 							{/* Sidebar Header */}
@@ -123,7 +111,6 @@ const Home = () => {
 								</h2>
 							</div>
 
-							{/* Users List */}
 							<div className="flex-1 overflow-y-auto p-4">
 								<div className="space-y-3">
 									{users.map((user) => (
@@ -167,7 +154,6 @@ const Home = () => {
 								</div>
 							</div>
 
-							{/* Sidebar Footer */}
 							<div className="p-4 border-t border-gray-200 bg-gray-50 space-y-3">
 								<div className="flex justify-between items-center text-sm text-gray-600">
 									<span>Voted: {users.filter((u) => u.hasVoted).length}</span>
@@ -176,7 +162,6 @@ const Home = () => {
 									</span>
 								</div>
 
-								{/* Add Random User Button */}
 								<button
 									onClick={addRandomUser}
 									className="w-full inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
