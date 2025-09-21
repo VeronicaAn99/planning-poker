@@ -1,10 +1,12 @@
 import type { User } from "@/pages/Home";
+import { PaymeSwissCard } from "@/components/PaymeSwissCard";
 
 type TableProps = {
 	users?: User[];
+	currentUser?: User;
 };
 
-export const Table = ({ users = [] }: TableProps) => {
+export const Table = ({ users = [], currentUser }: TableProps) => {
 	const votedUsers = users.filter((user) => user.hasVoted && user.vote);
 
 	return (
@@ -17,10 +19,13 @@ export const Table = ({ users = [] }: TableProps) => {
 						</div>
 						<div className="flex flex-wrap gap-1 justify-center">
 							{votedUsers.map((user) => (
-								<div
-									key={user.id}
-									className="w-8 h-10 bg-blue-500 text-white rounded text-xs flex items-center justify-center font-bold">
-									{user.vote}
+								<div key={user.id} className="scale-75">
+									<PaymeSwissCard
+										value="?"
+										isSelected={false}
+										showBack={true} // Always show pattern back for mystery
+										onClick={() => {}}
+									/>
 								</div>
 							))}
 						</div>
@@ -29,7 +34,6 @@ export const Table = ({ users = [] }: TableProps) => {
 					<div className="text-blue-400 text-sm">No votes yet</div>
 				)}
 			</div>
-
 			{users.map((user, index) => {
 				const angle = (index * 360) / users.length;
 				const radius = 240;
@@ -45,10 +49,28 @@ export const Table = ({ users = [] }: TableProps) => {
 							top: `calc(50% + ${y}px)`,
 						}}>
 						<div className="text-center">
-							{user.vote && (
-								<div className="w-8 h-10 bg-blue-500 text-white rounded text-xs flex items-center justify-center font-bold mb-1 mx-auto">
-									{user.vote}
-								</div>
+							{user.hasVoted ? (
+								user.id === currentUser?.id && user.vote ? (
+									<div className="mb-1 mx-auto scale-50">
+										<PaymeSwissCard
+											value={user.vote}
+											isSelected={false}
+											showBack={false}
+											onClick={() => {}}
+										/>
+									</div>
+								) : (
+									<div className="mb-1 mx-auto scale-50">
+										<PaymeSwissCard
+											value="?"
+											isSelected={false}
+											showBack={true}
+											onClick={() => {}}
+										/>
+									</div>
+								)
+							) : (
+								<div className="w-10 h-14 mb-1 mx-auto"></div>
 							)}
 							<div className="text-xs font-medium text-gray-700">
 								{user.name}
