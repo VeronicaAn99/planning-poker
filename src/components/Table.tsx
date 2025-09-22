@@ -13,46 +13,32 @@ export const Table = ({
 	currentUser,
 	showAverage = false,
 }: TableProps) => {
-	const [shakingCenterUserId, setShakingCenterUserId] = useState<number | null>(
-		null
-	);
-	const [shakingCircleUserId, setShakingCircleUserId] = useState<number | null>(
-		null
-	);
+	const [shakingUserId, setShakingUserId] = useState<number | null>(null);
+	const [showMyCard, setShowMyCard] = useState<boolean>(false);
 
 	const votedUsers = users.filter((user) => user.hasVoted && user.vote);
 
-	const [showMyCard, setShowMyCard] = useState<boolean>(false);
-
-	const handleCenterCardClick = (user: User) => {
+	const handleCardClick = (user: User) => {
 		if (user.id === currentUser?.id) {
 			setShowMyCard(!showMyCard);
 		} else {
-			setShakingCenterUserId(user.id);
-			setTimeout(() => setShakingCenterUserId(null), 600);
-		}
-	};
-
-	const handleCentralCardClick = (user: User) => {
-		if (user.id === currentUser?.id) {
-			setShowMyCard(!showMyCard);
-		} else {
-			setShakingCircleUserId(user.id);
-			setTimeout(() => setShakingCircleUserId(null), 600);
+			setShakingUserId(user.id);
+			setTimeout(() => setShakingUserId(null), 600);
 		}
 	};
 
 	return (
-		<div className="relative w-full h-[60%] flex items-center justify-center">
-			<div className="w-[40%] h-[44%] bg-blue-100 rounded-lg border-2 border-blue-200 flex items-center justify-center">
+		<div className="w-full max-w-4xl mx-auto">
+			<div className="bg-blue-100 rounded-xl border-2 border-blue-200 p-6 min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]">
 				{votedUsers.length > 0 ? (
-					<div className="text-center">
-						<div className="text-sm text-blue-600 font-medium mb-2">
-							{votedUsers.length} voted
+					<div className="h-full flex flex-col items-center justify-center">
+						<div className="text-sm sm:text-base text-blue-600 font-medium mb-4">
+							{votedUsers.length} {votedUsers.length === 1 ? "vote" : "votes"}{" "}
+							cast
 						</div>
-						<div className="flex flex-wrap gap-1 justify-center">
+						<div className="flex flex-wrap gap-2 sm:gap-3 justify-center items-center max-w-full">
 							{votedUsers.map((user) => {
-								const isShaking = shakingCenterUserId === user.id;
+								const isShaking = shakingUserId === user.id;
 								const isCurrentUser = user.id === currentUser?.id;
 								const shouldShowFront =
 									showAverage || (isCurrentUser && showMyCard);
@@ -60,10 +46,11 @@ export const Table = ({
 								return (
 									<div
 										key={user.id}
-										className={`scale-75 ${
+										className={`transform transition-all duration-200 hover:scale-105 ${
 											isShaking ? "animate-shake" : ""
-										} cursor-pointer`}
-										onClick={() => handleCenterCardClick(user)}>
+										} cursor-pointer scale-75 sm:scale-90 lg:scale-100`}
+										onClick={() => handleCardClick(user)}
+										title={`${user.name}'s vote`}>
 										<PaymeSwissCard
 											value={shouldShowFront ? user.vote! : "?"}
 											isSelected={false}
@@ -76,77 +63,13 @@ export const Table = ({
 						</div>
 					</div>
 				) : (
-					<div className="text-blue-400 text-sm">No votes yet</div>
-				)}
-			</div>
-
-			{users.map((user, index) => {
-				const angle = (index * 360) / users.length;
-				const radius = 240;
-				const x = Math.cos((angle * Math.PI) / 180) * radius;
-				const y = Math.sin((angle * Math.PI) / 180) * radius;
-				const isShaking = shakingCircleUserId === user.id;
-
-				return (
-					<div
-						key={user.id}
-						className="absolute transform -translate-x-1/2 -translate-y-1/2"
-						style={{
-							left: `calc(50% + ${x}px)`,
-							top: `calc(50% + ${y}px)`,
-						}}>
-						<div className="text-center">
-							{user.hasVoted ? (
-								(user.id === currentUser?.id && user.vote) || showAverage ? (
-									<div
-										className={`mb-1 mx-auto scale-50 ${
-											isShaking ? "animate-shake" : ""
-										} cursor-pointer`}
-										onClick={() => handleCentralCardClick(user)}>
-										<PaymeSwissCard
-											value={user.vote!}
-											isSelected={false}
-											showBack={false}
-											onClick={() => {}}
-										/>
-									</div>
-								) : user.id === currentUser?.id ? (
-									<div
-										className={`mb-1 mx-auto scale-50 cursor-pointer ${
-											isShaking ? "animate-shake" : ""
-										}`}
-										onClick={() => handleCentralCardClick(user)}>
-										<PaymeSwissCard
-											value={showMyCard ? user.vote! : "?"}
-											isSelected={false}
-											showBack={!showMyCard}
-											onClick={() => {}}
-										/>
-									</div>
-								) : (
-									<div
-										className={`mb-1 mx-auto scale-50 ${
-											isShaking ? "animate-shake" : ""
-										} cursor-pointer`}
-										onClick={() => handleCentralCardClick(user)}>
-										<PaymeSwissCard
-											value="?"
-											isSelected={false}
-											showBack={true}
-											onClick={() => {}}
-										/>
-									</div>
-								)
-							) : (
-								<div className="w-10 h-14 mb-1 mx-auto"></div>
-							)}
-							<div className="text-xs font-medium text-gray-700">
-								{user.name}
-							</div>
+					<div className="h-full flex items-center justify-center">
+						<div className="text-blue-400 text-sm sm:text-base">
+							Waiting for votes...
 						</div>
 					</div>
-				);
-			})}
+				)}
+			</div>
 		</div>
 	);
 };
