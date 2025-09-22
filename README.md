@@ -3,6 +3,8 @@
 A modern, responsive **Planning Poker** application built with **React, TypeScript, and Vite**.
 This tool helps agile development teams estimate story points collaboratively using a beautiful Swiss-themed card design.
 
+![App Screenshot](./assets/planning_poker.png)
+
 ---
 
 ## ✨ Features
