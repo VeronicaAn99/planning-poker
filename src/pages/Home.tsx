@@ -93,11 +93,16 @@ const Home = () => {
 	const handleReset = () => {
 		setSelectedCard(null);
 		setShowAverage(false);
-		setUsers((prev) =>
-			prev.map((user) => ({ ...user, hasVoted: false, vote: null }))
-		);
 		if (currentUser) {
-			setCurrentUser({ ...currentUser, hasVoted: false, vote: null });
+			const resetCurrentUser = {
+				...currentUser,
+				hasVoted: false,
+				vote: null,
+			};
+			setUsers([resetCurrentUser]);
+			setCurrentUser(resetCurrentUser);
+		} else {
+			setUsers([]);
 		}
 	};
 
