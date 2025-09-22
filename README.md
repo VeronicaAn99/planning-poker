@@ -50,12 +50,6 @@ Install dependencies:
 npm install
 ```
 
-Install required `shadcn/ui` components:
-
-```bash
-npx shadcn-ui@latest add button input label sheet
-```
-
 Start the development server:
 
 ```bash
@@ -88,7 +82,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 ### Viewing Results
 
 - Click **See Average** once votes are cast
-- Averages exclude special cards (`☕`, `∞`, `?`)
+- Averages exclude special cards (`☕`)
 - Click center cards to peek at individual votes
 - Use **Reset** to start a new estimation
 
@@ -102,8 +96,6 @@ Standard Planning Poker cards:
 Special Cards:
 
 - ☕ – Coffee break / Need more discussion
-- ∞ – Too complex to estimate
-- ? – Uncertain / Need more information
 
 ---
 
@@ -146,41 +138,6 @@ src/
 
 ---
 
-## 🎨 Customization
-
-### Adding New Card Values
-
-Edit the `cardValues` array in **`src/lib/utils.ts`**:
-
-```ts
-export const cardValues = [
-	"1",
-	"2",
-	"3",
-	"5",
-	"8",
-	"13",
-	"21",
-	"34",
-	"☕",
-	"∞",
-	"?",
-];
-```
-
-### Styling
-
-- Tailwind CSS utilities
-- `shadcn/ui` components for consistent theming
-- Swiss SVG patterns editable in **PaymeSwissCard.tsx**
-
-### Dark Mode
-
-- Supported via `shadcn/ui` theming system
-- Follow [shadcn/ui dark mode guide](https://ui.shadcn.com/docs/dark-mode)
-
----
-
 ## ⚙️ Development
 
 Available scripts:
@@ -199,27 +156,3 @@ npm run build
 ```
 
 The build artifacts will be stored in the **`dist/`** directory.
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m "Add amazing feature"`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙌 Acknowledgments
-
-- 🇨🇭 Swiss flag design inspiration for the card patterns
-- 📖 Planning Poker methodology by _James Grenning_ and _Mike Cohn_
-- 🎨 [`shadcn/ui`](https://ui.shadcn.com) for the excellent component library
