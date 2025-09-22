@@ -28,11 +28,11 @@ export const Table = ({
 	};
 
 	return (
-		<div className="w-full max-w-4xl mx-auto">
-			<div className="bg-blue-100 rounded-xl border-2 border-blue-200 p-6 min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]">
+		<div className="w-full max-w-5xl mx-auto px-4">
+			<div className="bg-blue-100 rounded-xl border-2 border-blue-200 p-4 sm:p-6 min-h-[150px] sm:min-h-[200px] lg:min-h-[250px]">
 				{votedUsers.length > 0 ? (
 					<div className="h-full flex flex-col items-center justify-center">
-						<div className="text-sm sm:text-base text-blue-600 font-medium mb-4">
+						<div className="text-sm sm:text-base text-blue-600 font-medium mb-3 sm:mb-4 text-center">
 							{votedUsers.length} {votedUsers.length === 1 ? "vote" : "votes"}{" "}
 							cast
 						</div>
@@ -48,7 +48,7 @@ export const Table = ({
 										key={user.id}
 										className={`transform transition-all duration-200 hover:scale-105 ${
 											isShaking ? "animate-shake" : ""
-										} cursor-pointer scale-75 sm:scale-90 lg:scale-100`}
+										} cursor-pointer scale-[0.6] sm:scale-75 lg:scale-90`}
 										onClick={() => handleCardClick(user)}
 										title={`${user.name}'s vote`}>
 										<PaymeSwissCard
@@ -64,8 +64,11 @@ export const Table = ({
 					</div>
 				) : (
 					<div className="h-full flex items-center justify-center">
-						<div className="text-blue-400 text-sm sm:text-base">
-							Waiting for votes...
+						<div className="text-center">
+							<div className="text-3xl sm:text-4xl lg:text-5xl mb-2">🃏</div>
+							<div className="text-blue-400 text-sm sm:text-base">
+								Waiting for votes...
+							</div>
 						</div>
 					</div>
 				)}

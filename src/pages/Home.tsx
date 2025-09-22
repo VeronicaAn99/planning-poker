@@ -109,23 +109,30 @@ const Home = () => {
 	return (
 		<div className="min-h-screen bg-gray-50">
 			{!currentUser ? (
-				<div className="flex items-center justify-center min-h-screen">
+				<div className="flex items-center justify-center min-h-screen p-4">
 					<AddUser onAddUser={addCurrentUser} />
 				</div>
 			) : (
-				<div className="flex h-screen">
-					<div className="flex-1 flex flex-col items-center justify-center p-6 gap-6">
-						<h1 className="text-2xl font-bold">Planning Poker</h1>
-						<Table
-							users={users}
-							currentUser={currentUser}
-							showAverage={showAverage}
-						/>
+				<div className="flex flex-col lg:flex-row min-h-screen">
+					{/* Main Content */}
+					<div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 sm:p-6 gap-4 sm:gap-6 overflow-y-auto">
+						<h1 className="text-xl sm:text-2xl font-bold text-center mt-4 lg:mt-0">
+							Planning Poker
+						</h1>
 
-						<div className="flex flex-col items-center gap-3">
+						<div className="w-full">
+							<Table
+								users={users}
+								currentUser={currentUser}
+								showAverage={showAverage}
+							/>
+						</div>
+
+						{/* Results and Buttons */}
+						<div className="flex flex-col items-center gap-3 w-full max-w-md">
 							{canShowAverage && (
 								<div
-									className={`text-center bg-white rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${
+									className={`text-center bg-white rounded-lg transition-all duration-300 ease-in-out overflow-hidden w-full ${
 										showAverage
 											? "p-4 shadow-md border max-h-96 opacity-100"
 											: "max-h-0 opacity-0 p-0"
@@ -134,30 +141,31 @@ const Home = () => {
 										{votedUsersCount} of {totalUsersCount} voted
 									</div>
 									{average !== null ? (
-										<div className="text-2xl font-bold text-blue-600">
+										<div className="text-xl sm:text-2xl font-bold text-blue-600">
 											Average: {average.toFixed(1)}
 										</div>
 									) : (
-										<div className="text-lg text-gray-500">
+										<div className="text-base sm:text-lg text-gray-500">
 											No numeric votes to calculate average
 										</div>
 									)}
 								</div>
 							)}
-							<div className="flex gap-2">
+
+							<div className="flex flex-col sm:flex-row gap-2 w-full">
 								<Button
 									onClick={() => setShowAverage(!showAverage)}
 									disabled={!canShowAverage}
 									variant="outline"
 									size="lg"
-									className="transition-all duration-200 cursor-pointer">
+									className="flex-1 transition-all duration-200 cursor-pointer">
 									{showAverage ? "Hide Results" : "See Average"}
 								</Button>
 
 								<Button
 									disabled={!canShowAverage}
 									onClick={handleReset}
-									className="cursor-pointer"
+									className="flex-1 cursor-pointer"
 									variant="ghost"
 									size="lg">
 									Reset
@@ -165,30 +173,40 @@ const Home = () => {
 							</div>
 						</div>
 
-						<div className="flex items-center">
-							{cardValues.map((value, index) => (
-								<div
-									key={index}
-									className={`relative transition-all duration-200 hover:scale-110 ${
-										selectedCard === index ? "scale-110" : ""
-									}`}
-									style={{
-										marginLeft: index === 0 ? "0" : "-14px",
-										zIndex: selectedCard === index ? 20 : 10 - index,
-									}}>
-									<PaymeSwissCard
-										value={value}
-										isSelected={selectedCard === index}
-										showBack={false}
-										onClick={() => {
-											const newSelectedCard =
-												selectedCard === index ? null : index;
-											setSelectedCard(newSelectedCard);
-											handleVote(newSelectedCard !== null ? value : null);
-										}}
-									/>
+						<div className="w-full px-4 pb-4 lg:pb-0">
+							<div className="overflow-x-auto overflow-y-visible py-6 px-2">
+								<div className="flex items-center justify-start lg:justify-center min-w-max">
+									{cardValues.map((value, index) => (
+										<div
+											key={index}
+											className={`relative transition-all duration-200 hover:scale-105 lg:hover:scale-110 flex-shrink-0 mx-2 ${
+												selectedCard === index ? "scale-105 lg:scale-110" : ""
+											}`}
+											style={{
+												marginLeft: index === 0 ? "8px" : "-6px",
+												marginRight:
+													index === cardValues.length - 1 ? "8px" : "0",
+												zIndex: selectedCard === index ? 20 : 10 - index,
+											}}>
+											<PaymeSwissCard
+												value={value}
+												isSelected={selectedCard === index}
+												showBack={false}
+												onClick={() => {
+													const newSelectedCard =
+														selectedCard === index ? null : index;
+													setSelectedCard(newSelectedCard);
+													handleVote(newSelectedCard !== null ? value : null);
+												}}
+											/>
+										</div>
+									))}
 								</div>
-							))}
+							</div>
+
+							<div className="lg:hidden text-center text-xs text-gray-400 mt-2">
+								← Swipe to see all cards →
+							</div>
 						</div>
 					</div>
 
