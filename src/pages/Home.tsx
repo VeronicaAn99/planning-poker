@@ -90,6 +90,17 @@ const Home = () => {
 	const average = calculateAverage();
 	const canShowAverage = votedUsersCount > 0;
 
+	const handleReset = () => {
+		setSelectedCard(null);
+		setShowAverage(false);
+		setUsers((prev) =>
+			prev.map((user) => ({ ...user, hasVoted: false, vote: null }))
+		);
+		if (currentUser) {
+			setCurrentUser({ ...currentUser, hasVoted: false, vote: null });
+		}
+	};
+
 	return (
 		<div className="min-h-screen bg-gray-50">
 			{!currentUser ? (
@@ -105,6 +116,50 @@ const Home = () => {
 							currentUser={currentUser}
 							showAverage={showAverage}
 						/>
+
+						<div className="flex flex-col items-center gap-3">
+							{canShowAverage && (
+								<div
+									className={`text-center bg-white rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${
+										showAverage
+											? "p-4 shadow-md border max-h-96 opacity-100"
+											: "max-h-0 opacity-0 p-0"
+									}`}>
+									<div className="text-sm text-gray-600 mb-1">
+										{votedUsersCount} of {totalUsersCount} voted
+									</div>
+									{average !== null ? (
+										<div className="text-2xl font-bold text-blue-600">
+											Average: {average.toFixed(1)}
+										</div>
+									) : (
+										<div className="text-lg text-gray-500">
+											No numeric votes to calculate average
+										</div>
+									)}
+								</div>
+							)}
+							<div className="flex gap-2">
+								<Button
+									onClick={() => setShowAverage(!showAverage)}
+									disabled={!canShowAverage}
+									variant="outline"
+									size="lg"
+									className="transition-all duration-200 cursor-pointer">
+									{showAverage ? "Hide Results" : "See Average"}
+								</Button>
+
+								<Button
+									disabled={!canShowAverage}
+									onClick={handleReset}
+									className="cursor-pointer"
+									variant="ghost"
+									size="lg">
+									Reset
+								</Button>
+							</div>
+						</div>
+
 						<div className="flex items-center">
 							{cardValues.map((value, index) => (
 								<div
@@ -130,44 +185,8 @@ const Home = () => {
 								</div>
 							))}
 						</div>
-
-						<div className="flex flex-col items-center gap-3">
-							<Button
-								onClick={() => setShowAverage(!showAverage)}
-								disabled={!canShowAverage}
-								variant="outline"
-								size="lg"
-								className={`transition-all duration-200 ${
-									canShowAverage
-										? "shadow-lg hover:shadow-xl"
-										: "opacity-50 cursor-not-allowed"
-								}`}>
-								{showAverage ? "Hide Results" : "See Average"}
-							</Button>
-
-							{canShowAverage && (
-								<div
-									className={`text-center bg-white rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${
-										showAverage
-											? "p-4 shadow-md border max-h-96 opacity-100"
-											: "max-h-0 opacity-0 p-0"
-									}`}>
-									<div className="text-sm text-gray-600 mb-1">
-										{votedUsersCount} of {totalUsersCount} voted
-									</div>
-									{average !== null ? (
-										<div className="text-2xl font-bold text-blue-600">
-											Average: {average.toFixed(1)}
-										</div>
-									) : (
-										<div className="text-lg text-gray-500">
-											No numeric votes to calculate average
-										</div>
-									)}
-								</div>
-							)}
-						</div>
 					</div>
+
 					<UsersSidebar
 						currentUser={currentUser}
 						users={users}
