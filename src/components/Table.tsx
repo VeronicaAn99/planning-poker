@@ -26,21 +26,17 @@ export const Table = ({
 
 	const handleCenterCardClick = (user: User) => {
 		if (user.id === currentUser?.id) {
-			// If it's my card, toggle showing the front
 			setShowMyCard(!showMyCard);
 		} else {
-			// If it's not my card, shake it
 			setShakingCenterUserId(user.id);
 			setTimeout(() => setShakingCenterUserId(null), 600);
 		}
 	};
 
-	const handleCircleCardClick = (user: User) => {
+	const handleCentralCardClick = (user: User) => {
 		if (user.id === currentUser?.id) {
-			// If it's my card, toggle showing the front
 			setShowMyCard(!showMyCard);
 		} else {
-			// If it's not my card, shake it
 			setShakingCircleUserId(user.id);
 			setTimeout(() => setShakingCircleUserId(null), 600);
 		}
@@ -106,7 +102,7 @@ export const Table = ({
 										className={`mb-1 mx-auto scale-50 ${
 											isShaking ? "animate-shake" : ""
 										} cursor-pointer`}
-										onClick={() => handleCircleCardClick(user)}>
+										onClick={() => handleCentralCardClick(user)}>
 										<PaymeSwissCard
 											value={user.vote!}
 											isSelected={false}
@@ -119,7 +115,7 @@ export const Table = ({
 										className={`mb-1 mx-auto scale-50 cursor-pointer ${
 											isShaking ? "animate-shake" : ""
 										}`}
-										onClick={() => handleCircleCardClick(user)}>
+										onClick={() => handleCentralCardClick(user)}>
 										<PaymeSwissCard
 											value={showMyCard ? user.vote! : "?"}
 											isSelected={false}
@@ -132,7 +128,7 @@ export const Table = ({
 										className={`mb-1 mx-auto scale-50 ${
 											isShaking ? "animate-shake" : ""
 										} cursor-pointer`}
-										onClick={() => handleCircleCardClick(user)}>
+										onClick={() => handleCentralCardClick(user)}>
 										<PaymeSwissCard
 											value="?"
 											isSelected={false}

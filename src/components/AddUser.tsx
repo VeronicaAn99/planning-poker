@@ -6,10 +6,9 @@ import { Button } from "./ui/button";
 
 type AddUserProps = {
 	onAddUser: (name: string) => void;
-	currentUser?: string;
 };
 
-export const AddUser = ({ onAddUser, currentUser }: AddUserProps) => {
+export const AddUser = ({ onAddUser }: AddUserProps) => {
 	const [userName, setUserName] = useState<string>("");
 
 	const handleSubmit = (e?: React.MouseEvent | React.KeyboardEvent) => {
@@ -32,40 +31,23 @@ export const AddUser = ({ onAddUser, currentUser }: AddUserProps) => {
 				</p>
 			</div>
 			<div>
-				{!currentUser ? (
-					<div className="space-y-4">
-						<div className="space-y-2">
-							<Label htmlFor="username">Your name</Label>
-							<Input
-								id="username"
-								placeholder="e.g., John Doe"
-								value={userName}
-								onChange={(e) => setUserName(e.target.value)}
-								onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
-								maxLength={30}
-							/>
-						</div>
-						<Button onClick={handleSubmit} className="w-full">
-							<Plus className="w-4 h-4 mr-2" />
-							Join Session
-						</Button>
+				<div className="space-y-4">
+					<div className="space-y-2">
+						<Label htmlFor="username">Your name</Label>
+						<Input
+							id="username"
+							placeholder="e.g., John Doe"
+							value={userName}
+							onChange={(e) => setUserName(e.target.value)}
+							onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
+							maxLength={30}
+						/>
 					</div>
-				) : (
-					<div className="text-center space-y-2">
-						{/* <Avatar className="mx-auto">
-							<AvatarFallback>
-								{currentUser.slice(0, 2).toUpperCase()}
-							</AvatarFallback>
-						</Avatar> */}
-						<p className="text-sm text-muted-foreground">
-							Welcome,{" "}
-							<span className="font-semibold text-foreground">
-								{currentUser}
-							</span>
-							!
-						</p>
-					</div>
-				)}
+					<Button onClick={handleSubmit} className="w-full">
+						<Plus className="w-4 h-4 mr-2" />
+						Join Session
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

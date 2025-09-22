@@ -19,7 +19,7 @@ const Home = () => {
 	const [selectedCard, setSelectedCard] = useState<number | null>(null);
 	const [showAverage, setShowAverage] = useState<boolean>(false);
 
-	const addUserSimple = (name: string): void => {
+	const addCurrentUser = (name: string): void => {
 		const newUser: User = {
 			id: Date.now(),
 			name: name,
@@ -70,8 +70,7 @@ const Home = () => {
 			.map((user) => {
 				const vote = user.vote;
 				// Handle special cards
-				if (vote === "?" || vote === "∞" || vote === "☕") return null;
-				// Convert string to number
+				if (vote === "☕") return null;
 				const num = parseFloat(vote || "0");
 				return isNaN(num) ? null : num;
 			})
@@ -95,7 +94,7 @@ const Home = () => {
 		<div className="min-h-screen bg-gray-50">
 			{!currentUser ? (
 				<div className="flex items-center justify-center min-h-screen">
-					<AddUser onAddUser={addUserSimple} currentUser={currentUser?.name} />
+					<AddUser onAddUser={addCurrentUser} />
 				</div>
 			) : (
 				<div className="flex h-screen">
