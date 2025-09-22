@@ -64,11 +64,8 @@ export const Table = ({
 					</div>
 				) : (
 					<div className="h-full flex items-center justify-center">
-						<div className="text-center">
-							<div className="text-3xl sm:text-4xl lg:text-5xl mb-2">🃏</div>
-							<div className="text-blue-400 text-sm sm:text-base">
-								Waiting for votes...
-							</div>
+						<div className="text-blue-400 text-sm sm:text-base">
+							Waiting for votes...
 						</div>
 					</div>
 				)}
